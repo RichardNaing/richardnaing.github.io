@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Richard Naing | QA Automation Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --bg2: #161b22;
+      --bg3: #21262d;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --card: #1c2128;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Sections ── */
+    section { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding-top: 80px;
+    }
+    .hero-tag {
+      font-family: 'Fira Code', monospace;
+      color: var(--accent2);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .hero-name {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .hero-title {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .hero-desc {
+      max-width: 540px;
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.65rem 1.4rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+      border: none;
+    }
+    .btn-primary:hover { background: #79b8ff; }
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .btn-outline:hover { background: rgba(88,166,255,0.1); }
+
+    /* ── Section headings ── */
+    .section-label {
+      font-family: 'Fira Code', monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .section-divider {
+      width: 50px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── About ── */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    #about p { color: var(--muted); margin-bottom: 1rem; }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .stat-card .number {
+      font-size: 2rem; font-weight: 700;
+      color: var(--accent);
+    }
+    .stat-card .label {
+      font-size: 0.8rem; color: var(--muted);
+    }
+
+    /* ── Skills ── */
+    #skills .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .skill-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .skill-group h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* ── Experience ── */
+    #experience .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2.5rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.4rem;
+      top: 0.4rem;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+    }
+    .timeline-item.current::before { background: var(--accent2); }
+    .timeline-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'Fira Code', monospace;
+      margin-bottom: 0.3rem;
+    }
+    .timeline-role {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    .timeline-company {
+      color: var(--accent);
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+    }
+    .timeline-industry {
+      display: inline-block;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-bottom: 0.8rem;
+    }
+    .timeline-desc { color: var(--muted); font-size: 0.9rem; }
+
+    /* ── Contact ── */
+    #contact {
+      text-align: center;
+      padding-bottom: 6rem;
+    }
+    #contact p { color: var(--muted); max-width: 480px; margin: 0 auto 2rem; }
+    .contact-links {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      #about .about-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+    }
+
+    /* ── Animations ── */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#hero" class="nav-logo">rn.dev</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <p class="hero-tag">// hello, world</p>
+    <h1 class="hero-name">Richard Naing</h1>
+    <p class="hero-title">QA Automation Engineer</p>
+    <p class="hero-desc">
+      Building reliable software through rigorous testing. Specializing in end-to-end automation with Playwright, TypeScript, and CI/CD pipelines across FinTech, Healthcare, and Wealth Management domains.
+    </p>
+    <div class="hero-btns">
+      <a href="#experience" class="btn btn-primary">View Experience</a>
+      <a href="#contact" class="btn btn-outline">Contact Me</a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <p class="section-label">// 01. about</p>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-divider"></div>
+    <div class="about-grid">
+      <div>
+        <p>
+          I'm a QA Automation Engineer with experience across FinTech, Wealth Management, and Healthcare industries. I specialize in building robust test frameworks that catch bugs before they reach production.
+        </p>
+        <p>
+          My approach combines thorough manual testing expertise with modern automation tooling — from writing Playwright E2E suites in TypeScript to designing API test strategies with Postman and validating data pipelines with SQL.
+        </p>
+        <p>
+          I work best in Agile teams where quality is everyone's responsibility, and I champion Shift-Left testing to surface issues early in the development cycle.
+        </p>
+      </div>
+      <div class="about-stats fade-in">
+        <div class="stat-card">
+          <div class="number">10+</div>
+          <div class="label">Years in QA</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">3</div>
+          <div class="label">Industries</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">E2E</div>
+          <div class="label">Automation Expert</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">CI/CD</div>
+          <div class="label">Pipeline Integration</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <p class="section-label">// 02. skills</p>
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="section-divider"></div>
+    <div class="skills-grid">
+      <div class="skill-group fade-in">
+        <h3>Automation &amp; Frameworks</h3>
+        <div class="skill-tags">
+          <span class="tag">Playwright</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Page Object Model</span>
+          <span class="tag">Data-Driven Testing</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <h3>API &amp; Backend</h3>
+        <div class="skill-tags">
+          <span class="tag">Postman</span>
+          <span class="tag">API Testing</span>
+          <span class="tag">JSON Schema Validation</span>
+          <span class="tag">SQL</span>
+          <span class="tag">REST</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <h3>DevOps &amp; CI/CD</h3>
+        <div class="skill-tags">
+          <span class="tag">GitHub Actions</span>
+          <span class="tag">Git</span>
+          <span class="tag">BrowserStack</span>
+          <span class="tag">Linux/Unix</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <h3>Testing Methodologies</h3>
+        <div class="skill-tags">
+          <span class="tag">Shift-Left Testing</span>
+          <span class="tag">Agile/Scrum</span>
+          <span class="tag">Exploratory Testing</span>
+          <span class="tag">Smoke Testing</span>
+          <span class="tag">Regression Testing</span>
+          <span class="tag">UAT</span>
+          <span class="tag">Sanity Testing</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <h3>Tools &amp; Platforms</h3>
+        <div class="skill-tags">
+          <span class="tag">JIRA</span>
+          <span class="tag">Zephyr Scale</span>
+          <span class="tag">VS Code</span>
+          <span class="tag">BrowserStack</span>
+          <span class="tag">RTM</span>
+          <span class="tag">Mac OSX</span>
+          <span class="tag">Windows</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <h3>Soft Skills</h3>
+        <div class="skill-tags">
+          <span class="tag">Test Planning</span>
+          <span class="tag">Documentation</span>
+          <span class="tag">Cross-functional Collab</span>
+          <span class="tag">Root Cause Analysis</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <p class="section-label">// 03. experience</p>
+    <h2 class="section-title">Work Experience</h2>
+    <div class="section-divider"></div>
+    <div class="timeline">
+
+      <div class="timeline-item current fade-in">
+        <p class="timeline-meta">July 2024 — Present</p>
+        <h3 class="timeline-role">QA Automation Engineer</h3>
+        <p class="timeline-company">eToro</p>
+        <span class="timeline-industry">FinTech / Capital Markets</span>
+        <p class="timeline-desc">
+          Leading automation efforts for a global trading platform. Building and maintaining Playwright E2E test suites in TypeScript, integrating with GitHub Actions CI/CD pipelines, and ensuring coverage across web and API layers in a high-stakes financial environment.
+        </p>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <p class="timeline-meta">July 2016</p>
+        <h3 class="timeline-role">QA Automation Engineer</h3>
+        <p class="timeline-company">Figure 8 Investment Strategies</p>
+        <span class="timeline-industry">Wealth Management</span>
+        <p class="timeline-desc">
+          Developed and executed automated test strategies for wealth management software. Performed API testing, regression testing, and collaborated closely with developers to implement Shift-Left quality practices.
+        </p>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <p class="timeline-meta">April 2015</p>
+        <h3 class="timeline-role">Junior QA Engineer</h3>
+        <p class="timeline-company">St. Luke's Health System</p>
+        <span class="timeline-industry">Healthcare (EHR)</span>
+        <p class="timeline-desc">
+          Tested Electronic Health Record (EHR) systems in a highly regulated healthcare environment. Performed manual exploratory testing, UAT coordination, and requirements traceability to ensure compliance and patient data integrity.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <p class="section-label">// 04. contact</p>
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="section-divider" style="margin: 0 auto 1.5rem;"></div>
+    <p>
+      I'm currently open to Senior QA Engineer and QA Lead opportunities. Whether you have a question or just want to say hello — my inbox is always open.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:richardbbnaing@gmail.com" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        richardbbnaing@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/richard-naing" target="_blank" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/richardnaing" target="_blank" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by Richard Naing &nbsp;·&nbsp; <span id="year"></span></p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
