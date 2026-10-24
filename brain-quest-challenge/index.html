@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brain Quest Challenge</title>
+  <meta name="description" content="Free brain quiz for kids — 25 questions across numbers, verbal reasoning, and logic." />
+  <style>
+  :root {
+    --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5c5c5c;
+    --color-text-tertiary: #8a8a8a;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f4f5;
+    --color-border-tertiary: #e4e4e7;
+    --color-border-secondary: #d4d4d8;
+    --border-radius-lg: 12px;
+    --border-radius-md: 8px;
+  }
+  body { background: #fafafa; color: var(--color-text-primary); max-width: 720px; margin: 0 auto; }
+  .site-footer { text-align: center; padding: 2rem 1rem 3rem; font-size: 14px; color: var(--color-text-secondary); }
+  .donate-btn {
+    display: inline-block; margin-top: 12px; padding: 10px 20px; font-size: 14px; font-weight: 500;
+    background: transparent; color: #04342C; border: 1.5px solid #5DCAA5; border-radius: 999px;
+    text-decoration: none;
+  }
+  .donate-btn:hover { background: #EAF3DE; }
+  .free-badge { font-size: 12px; color: #3B6D11; margin-bottom: 8px; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  #app { padding: 1rem 0; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .hero { text-align: center; padding: 2rem 1rem; }
+  .hero h1 { font-size: 28px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.5rem; }
+  .hero p { font-size: 16px; color: var(--color-text-secondary); margin-bottom: 2rem; }
+
+  .section-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+  .section-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; text-align: center; }
+  .section-card .icon { font-size: 24px; margin-bottom: 8px; }
+  .section-card .label { font-size: 13px; color: var(--color-text-secondary); }
+  .section-card .count { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+
+  .start-btn { display: block; margin: 0 auto; padding: 14px 40px; font-size: 17px; font-weight: 500; background: #5DCAA5; color: #04342C; border: none; border-radius: var(--border-radius-lg); cursor: pointer; }
+  .start-btn:hover { background: #1D9E75; }
+
+  .quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 8px; }
+  .section-badge { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+  .score-display { font-size: 14px; color: var(--color-text-secondary); }
+  .score-display span { font-weight: 500; color: var(--color-text-primary); }
+
+  .progress-bar-wrap { height: 6px; background: var(--color-background-secondary); border-radius: 3px; margin-bottom: 1.5rem; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #5DCAA5; border-radius: 3px; transition: width 0.4s; }
+
+  .question-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+  .q-num { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 8px; }
+  .q-text { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.5; }
+
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .option-btn { background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 14px 12px; font-size: 15px; color: var(--color-text-primary); cursor: pointer; text-align: left; transition: background 0.15s, border-color 0.15s; }
+  .option-btn:hover:not(:disabled) { background: var(--color-background-secondary); }
+  .option-btn.correct { background: #EAF3DE; border-color: #639922; color: #173404; }
+  .option-btn.wrong { background: #FCEBEB; border-color: #A32D2D; color: #501313; }
+  .option-btn.reveal-correct { background: #EAF3DE; border-color: #639922; color: #173404; }
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-box { border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 1rem; font-size: 15px; display: none; }
+  .feedback-box.correct { background: #EAF3DE; color: #3B6D11; border: 0.5px solid #C0DD97; }
+  .feedback-box.wrong { background: #FCEBEB; color: #791F1F; border: 0.5px solid #F7C1C1; }
+
+  .next-btn { display: block; width: 100%; padding: 13px; font-size: 16px; font-weight: 500; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); cursor: pointer; color: var(--color-text-primary); display: none; }
+  .next-btn:hover { background: var(--color-background-secondary); }
+
+  .stars-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 1rem; font-size: 22px; }
+  .result-big { text-align: center; padding: 1.5rem 0; }
+  .result-big .score-num { font-size: 48px; font-weight: 500; color: var(--color-text-primary); }
+  .result-big .score-label { font-size: 16px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+  .result-msg { font-size: 18px; font-weight: 500; text-align: center; margin-bottom: 2rem; }
+
+  .section-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 2rem; }
+  .sec-result { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; }
+  .sec-result .sr-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .sec-result .sr-score { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+
+  .replay-btn { display: block; margin: 0 auto; padding: 13px 36px; font-size: 16px; font-weight: 500; background: #5DCAA5; color: #04342C; border: none; border-radius: var(--border-radius-lg); cursor: pointer; }
+  .replay-btn:hover { background: #1D9E75; }
+
+  @media (max-width: 480px) {
+    .options { grid-template-columns: 1fr; }
+    .section-cards, .section-results { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div id="app">
+  <div id="startScreen" class="screen active">
+    <div class="hero">
+      <h1>Brain Quest Challenge</h1>
+      <p>25 questions across 3 sections. Answer them all and earn your stars!</p>
+      <div class="section-cards">
+        <div class="section-card">
+          <div class="icon">🔢</div>
+          <div class="count">10 questions</div>
+          <div class="label">Number & Pattern</div>
+        </div>
+        <div class="section-card">
+          <div class="icon">🔤</div>
+          <div class="count">7 questions</div>
+          <div class="label">Verbal Reasoning</div>
+        </div>
+        <div class="section-card">
+          <div class="icon">🧩</div>
+          <div class="count">8 questions</div>
+          <div class="label">Logic & Thinking</div>
+        </div>
+      </div>
+      <button class="start-btn" onclick="startQuiz()">Start the Challenge!</button>
+    </div>
+  </div>
+
+  <div id="quizScreen" class="screen">
+    <div class="quiz-header">
+      <div class="section-badge" id="sectionBadge">Section 1</div>
+      <div class="score-display">Score: <span id="scoreDisplay">0</span> / <span id="totalDisplay">25</span></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+    </div>
+    <div class="question-card">
+      <div class="q-num" id="qNum">Question 1 of 25</div>
+      <div class="q-text" id="qText"></div>
+    </div>
+    <div class="options" id="optionsGrid"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next question →</button>
+  </div>
+
+  <div id="resultScreen" class="screen">
+    <div class="stars-row" id="starsRow"></div>
+    <div class="result-big">
+      <div class="score-num" id="finalScore">0/25</div>
+      <div class="score-label">correct answers</div>
+    </div>
+    <div class="result-msg" id="resultMsg"></div>
+    <div class="section-results">
+      <div class="sec-result">
+        <div class="sr-label">🔢 Number & Pattern</div>
+        <div class="sr-score" id="sec1Score">—</div>
+      </div>
+      <div class="sec-result">
+        <div class="sr-label">🔤 Verbal Reasoning</div>
+        <div class="sr-score" id="sec2Score">—</div>
+      </div>
+      <div class="sec-result">
+        <div class="sr-label">🧩 Logic & Thinking</div>
+        <div class="sr-score" id="sec3Score">—</div>
+      </div>
+    </div>
+    <button class="replay-btn" onclick="startQuiz()">Play again!</button>
+  </div>
+</div>
+
+  <div class="site-footer">
+    <div class="free-badge">100% free to play · no sign-up</div>
+    <div>Made for curious minds. Tips are optional.</div>
+    <a class="donate-btn" id="donateBtn" href="DONATE_URL" target="_blank" rel="noopener" hidden>Support this game ♥</a>
+  </div>
+
+<script>
+(function(){
+  var b=document.getElementById('donateBtn');
+  if(b && b.getAttribute('href') && b.getAttribute('href')!=='DONATE_URL'){ b.hidden=false; }
+})();
+</script>
+<script>
+const questions = [
+  { s:1, q:"What comes next?  2, 5, 10, 17, ?", opts:["24","26","28","30"], ans:1, exp:"The differences are +3, +5, +7, +9 — so 17 + 9 = 26!" },
+  { s:1, q:"What comes next?  3, 9, 27, ?", opts:["54","72","81","90"], ans:2, exp:"Each number is multiplied by 3. 27 × 3 = 81!" },
+  { s:1, q:"What comes next?  1, 4, 9, 16, ?", opts:["20","24","25","30"], ans:2, exp:"These are square numbers: 1², 2², 3², 4², 5² = 25!" },
+  { s:1, q:"What comes next?  5, 7, 11, 13, 17, ?", opts:["18","19","21","23"], ans:3, exp:"These are prime numbers! The next prime after 17 is 19." },
+  { s:1, q:"What comes next?  10, 20, 15, 30, 25, ?", opts:["35","40","45","50"], ans:3, exp:"The pattern alternates: ×2, then −5. So 25 × 2 = 50!" },
+  { s:1, q:"What number is missing?  6, 12, __, 48", opts:["18","24","30","36"], ans:1, exp:"Each number is doubled! 12 × 2 = 24, then 24 × 2 = 48." },
+  { s:1, q:"What comes next?  8, 6, 4, 2, ?", opts:["1","0","−2","2"], ans:1, exp:"Each number decreases by 2. So 2 − 2 = 0!" },
+  { s:1, q:"What comes next?  2, 3, 5, 8, 12, ?", opts:["15","17","18","20"], ans:1, exp:"The differences are +1, +2, +3, +4, +5. So 12 + 5 = 17!" },
+  { s:1, q:"What comes next?  100, 90, 80, __", opts:["75","70","85","60"], ans:1, exp:"Counting down by 10! 80 − 10 = 70." },
+  { s:1, q:"What comes next?  1, 3, 6, 10, __", opts:["12","14","15","18"], ans:2, exp:"Add 2, then 3, then 4, then 5. So 10 + 5 = 15!" },
+  { s:2, q:"Bird : Fly   ::   Fish : ?", opts:["Jump","Swim","Walk","Dive"], ans:1, exp:"A bird flies — a fish swims! That's how they move." },
+  { s:2, q:"Car : Engine   ::   Body : ?", opts:["Brain","Heart","Blood","Bone"], ans:1, exp:"The engine powers a car, just like the heart pumps blood to power your body!" },
+  { s:2, q:"Which word does NOT belong?\nApple  •  Banana  •  Carrot  •  Orange", opts:["Apple","Banana","Carrot","Orange"], ans:2, exp:"Apple, Banana, and Orange are fruits. Carrot is a vegetable!" },
+  { s:2, q:"Dog : Puppy   ::   Cat : ?", opts:["Kitten","Cub","Baby","Calf"], ans:0, exp:"A baby dog is a puppy, and a baby cat is a kitten!" },
+  { s:2, q:'Which is the opposite of "expand"?', opts:["Grow","Shrink","Stretch","Build"], ans:1, exp:'Expand means to get bigger. The opposite is shrink — to get smaller!' },
+  { s:2, q:"Book is to Read   as   Fork is to:", opts:["Cut","Eat","Cook","Hold"], ans:1, exp:"You use a book to read, and you use a fork to eat!" },
+  { s:2, q:"Which one is different?\nAirplane  •  Helicopter  •  Rocket  •  Bicycle", opts:["Airplane","Helicopter","Rocket","Bicycle"], ans:3, exp:"Airplanes, helicopters, and rockets all fly. A bicycle stays on the ground!" },
+  { s:3, q:"If all cats are animals, and some animals are pets, are all cats pets?", opts:["Yes","No","Cannot tell"], ans:2, exp:"We can't be sure! Some animals are pets, but we don't know if ALL animals (including all cats) are pets." },
+  { s:3, q:"Leo has 3 red cars and 2 blue cars. How many cars total?", opts:["3","5","6","4"], ans:1, exp:"3 + 2 = 5 cars total!" },
+  { s:3, q:"If 1 toy costs $5, how much do 3 toys cost?", opts:["$10","$12","$15","$20"], ans:2, exp:"5 × 3 = $15!" },
+  { s:3, q:"Which shape comes next?\nCircle, Square, Triangle, Circle, Square, ?", opts:["Circle","Triangle","Square","Star"], ans:1, exp:"The pattern repeats: Circle, Square, Triangle. After Square comes Triangle!" },
+  { s:3, q:"If today is Monday, what day is 3 days later?", opts:["Tuesday","Wednesday","Thursday","Friday"], ans:2, exp:"Monday → Tuesday → Wednesday → Thursday. Three days later is Thursday!" },
+  { s:3, q:"Find the missing number:  4, 8, 16, __", opts:["20","24","32","36"], ans:2, exp:"Each number doubles! 16 × 2 = 32." },
+  { s:3, q:"Which does NOT belong?\n2  •  4  •  6  •  9", opts:["2","4","6","9"], ans:3, exp:"2, 4, and 6 are even numbers. 9 is odd — it doesn't belong!" },
+  { s:3, q:"If you have 2 apples and get 3 more, then eat 1, how many left?", opts:["3","4","5","6"], ans:1, exp:"2 + 3 = 5, then 5 − 1 = 4 apples!" },
+];
+
+let current = 0;
+let score = 0;
+let sectionScores = [0,0,0];
+let answered = false;
+
+const sectionLabels = {1:"🔢 Number & Pattern", 2:"🔤 Verbal Reasoning", 3:"🧩 Logic & Thinking"};
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz() {
+  current = 0; score = 0; sectionScores = [0,0,0]; answered = false;
+  show('quizScreen');
+  render();
+}
+
+function render() {
+  const q = questions[current];
+  document.getElementById('sectionBadge').textContent = sectionLabels[q.s];
+  document.getElementById('qNum').textContent = `Question ${current+1} of 25`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('progressBar').style.width = (current / 25 * 100) + '%';
+
+  const grid = document.getElementById('optionsGrid');
+  grid.style.gridTemplateColumns = q.opts.length === 3 ? '1fr' : '1fr 1fr';
+  grid.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = ['A) ','B) ','C) ','D) '][i] + opt;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedbackBox');
+  fb.style.display = 'none';
+  fb.className = 'feedback-box';
+  document.getElementById('nextBtn').style.display = 'none';
+  answered = false;
+}
+
+function selectAnswer(chosen) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('feedbackBox');
+  if (chosen === q.ans) {
+    btns[chosen].classList.add('correct');
+    score++;
+    sectionScores[q.s-1]++;
+    fb.className = 'feedback-box correct';
+    fb.textContent = '✓ Correct! ' + q.exp;
+  } else {
+    btns[chosen].classList.add('wrong');
+    btns[q.ans].classList.add('reveal-correct');
+    fb.className = 'feedback-box wrong';
+    fb.textContent = '✗ Not quite. ' + q.exp;
+  }
+  fb.style.display = 'block';
+  document.getElementById('scoreDisplay').textContent = score;
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = current < 24 ? 'Next question →' : 'See my results!';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= 25) { showResults(); return; }
+  render();
+}
+
+function showResults() {
+  show('resultScreen');
+  document.getElementById('finalScore').textContent = score + '/25';
+
+  const pct = score / 25;
+  let msg, stars;
+  if (pct === 1)       { msg = "Perfect score! You are a genius!"; stars = "⭐⭐⭐⭐⭐"; }
+  else if (pct >= 0.8) { msg = "Amazing job! You are a star!"; stars = "⭐⭐⭐⭐"; }
+  else if (pct >= 0.6) { msg = "Great work! Keep it up!"; stars = "⭐⭐⭐"; }
+  else if (pct >= 0.4) { msg = "Good try! Practice makes perfect!"; stars = "⭐⭐"; }
+  else                 { msg = "Keep going — you can do it!"; stars = "⭐"; }
+
+  document.getElementById('starsRow').textContent = stars;
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('sec1Score').textContent = sectionScores[0] + '/10';
+  document.getElementById('sec2Score').textContent = sectionScores[1] + '/7';
+  document.getElementById('sec3Score').textContent = sectionScores[2] + '/8';
+}
+</script>
+</html>
